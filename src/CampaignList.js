@@ -1,30 +1,40 @@
-import React from 'react';
+// CampaignList.js
+import React, { useContext } from 'react';
+import moment from 'moment';
+import { CampaignContext } from './CampaignContext';
 
-const CampaignList = ({ campaigns }) => {
+const CampaignList = () => {
+    const { filteredCampaigns, users, isCampaignActive } = useContext(CampaignContext);
+
+    const getUserName = (userId) => {
+        const user = users.find((user) => user.id === userId);
+        return user ? user.name : 'Unknown User';
+    };
+
     return (
         <table>
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>User</th>
+                    <th>User Name</th>
                     <th>Start Date</th>
                     <th>End Date</th>
-                    <th>Status</th>
-                    <th>Budget (USD)</th>
+                    <th>Active</th>
+                    <th>Budget</th>
                 </tr>
             </thead>
             <tbody>
-                {campaigns.map((campaign) => {
-                    const currentDate = new Date();
-                    const isActive = new Date(campaign.startDate) <= currentDate && new Date(campaign.endDate) >= currentDate;
-                    const userName = campaign.userId ? `User ${campaign.userId}` : 'Unknown user';
+                {filteredCampaigns.map((campaign) => {
+                    const isActive = isCampaignActive(campaign.startDate, campaign.endDate);
+                    console.log(isActive,"..");
+                    // const userName = campaign.userId ? `User ${campaign.userId}` : 'Unknown user';
 
                     return (
                         <tr key={campaign.id}>
                             <td>{campaign.name}</td>
-                            <td>{userName}</td>
-                            <td>{campaign.startDate}</td>
-                            <td>{campaign.endDate}</td>
+                            <td>{getUserName(campaign.userId)}</td>
+                            <td>{moment(campaign.startDate).format('YYYY-MM-DD')}</td>
+                            <td>{moment(campaign.endDate).format('YYYY-MM-DD')}</td>
                             <td>
                                 <span className={`${isActive ? 'activeClass' : 'inactiveClass'}`}></span>
                                 {isActive ? "Active" : "Inactive"}
@@ -39,5 +49,3 @@ const CampaignList = ({ campaigns }) => {
 };
 
 export default CampaignList;
-
-
