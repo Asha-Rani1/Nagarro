@@ -26,8 +26,6 @@ const CampaignList = () => {
             <tbody>
                 {filteredCampaigns.map((campaign) => {
                     const isActive = isCampaignActive(campaign.startDate, campaign.endDate);
-                    console.log(isActive,"..");
-                    // const userName = campaign.userId ? `User ${campaign.userId}` : 'Unknown user';
 
                     return (
                         <tr key={campaign.id}>

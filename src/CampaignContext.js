@@ -13,6 +13,16 @@ export const CampaignProvider = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [dateRange, setDateRange] = useState({ start: null, end: null });
 
+  window.AddCampaigns = (newCampaigns) => {
+    setCampaigns(prevCampaigns => [
+        ...prevCampaigns,
+        ...newCampaigns.map((campaign, index) => ({
+            ...campaign,
+            id: prevCampaigns.length + index + 1, // Ensure unique IDs
+        }))
+    ]);
+};
+
   // Fetch users and campaigns
   useEffect(() => {
     const fetchUsers = async () => {
@@ -29,7 +39,6 @@ export const CampaignProvider = ({ children }) => {
 
   const isCampaignActive = (startDate, endDate) => {
     const today = moment();
-    console.log( today.isBetween(moment(startDate), moment(endDate), null, '[]'))
     return today.isBetween(moment(startDate), moment(endDate), null, '[]');
   };
 
